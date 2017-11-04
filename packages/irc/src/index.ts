@@ -26,9 +26,6 @@ const flushAndTick = () => {
 
 // @NOTE Обработчик записей очереди
 const handleQueue = () => {
-  // @TODO logMessage
-  console.log("Обработка очереди", queueItem)
-
   if (queueItem !== null) {
     // @TODO TypeScript пока не слишком умный (queueItem === null, as ItemPm[])
     const type = queueItem.type
@@ -67,8 +64,6 @@ const handleQueue = () => {
           )
         })
         .then(id => {
-          // @TODO logMessage
-          console.log(`Магазин ${id} успешно обновлен`)
           flushAndTick()
         })
         .catch(error => {
@@ -83,9 +78,6 @@ const handleQueue = () => {
     }
   } else {
     queueItem = queue.shift() || null
-
-    // @TODO logMessage
-    console.log("Следующий элемент очереди", queueItem)
 
     if (queueItem) {
       const cmd = queueItem.type === "sell" ? "shop" : "buy"
@@ -104,9 +96,6 @@ const handleQueue = () => {
 const tick = () => {
   selectCreatedStores()
     .then(stores => {
-      // @TODO logMessage
-      console.log("Обработка записей из БД", stores)
-
       if (stores.length === 0) {
         setTimeout(tick, cfg.tickTimeout)
       } else {
@@ -123,7 +112,7 @@ const tick = () => {
     })
     .catch(error => {
       // @TODO logMessage
-      console.log("Ошибка при запросе магазинов", error)
+      console.error("Ошибка при запросе магазинов", error)
 
       setTimeout(tick, cfg.tickTimeout)
     })
@@ -148,10 +137,7 @@ con.addListener("message", (from: string, to: string, mes: string) => {
       message.y,
       []
     )
-      .then(id => {
-        // @TODO logMessage
-        console.log("Магазин создан/обновлен", id)
-      })
+      .then(id => {})
       .catch(err => {
         // @TODO logMessage
         console.error("Ошибка при создании/обновлении магазина", err)
