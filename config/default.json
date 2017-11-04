@@ -8,7 +8,8 @@
     "nick": "TraderBot",
     "channels": ["#FreeRO"],
     "server": "FreeRO",
-    "operator": "FreeRO"
+    "operator": "FreeRO",
+    "queueTimeout": 2500
   },
   "tg": {}
 }

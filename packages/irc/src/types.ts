@@ -1,10 +1,22 @@
+import { StoreType } from "./db/types"
+
 export interface Config {
   host: string
   nick: string
   channels: string[]
   server: string
   operator: string
+  queueTimeout: number
 }
+
+export interface QueueItem {
+  type: StoreType
+  owner: string
+}
+
+export type Queue = QueueItem[]
+
+export type Nullable<T> = null | T
 
 export interface TextMessage {
   type: "text"
@@ -56,7 +68,7 @@ export interface TextPm {
 
 export interface OwnerPm {
   type: "owner"
-  owner: string
+  title: string
   map: string
   x: number
   y: number

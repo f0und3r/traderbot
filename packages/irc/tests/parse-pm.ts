@@ -16,7 +16,7 @@ describe("parsePm", () => {
     const pm = parsePm(text) as OwnerPm
 
     expect(pm.type).to.equal("owner")
-    expect(pm.owner).to.equal("Химпром")
+    expect(pm.title).to.equal("Химпром")
     expect(pm.map).to.equal("brasilis")
     expect(pm.x).to.equal(278)
     expect(pm.y).to.equal(307)

@@ -8,7 +8,7 @@ export default (mes: string): Pm => {
   if (ownerMatches) {
     return {
       type: "owner",
-      owner: ownerMatches[1],
+      title: ownerMatches[1],
       map: ownerMatches[2],
       x: parseInt(ownerMatches[3]) || 0,
       y: parseInt(ownerMatches[4]) || 0

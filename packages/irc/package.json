@@ -1,10 +1,13 @@
 {
   "dependencies": {
     "config": "^1.27.0",
-    "irc": "^0.5.2"
+    "elow": "^1.0.0",
+    "irc": "^0.5.2",
+    "mysql": "^2.15.0"
   },
   "devDependencies": {
     "@types/config": "0.0.33",
-    "@types/irc": "^0.3.32"
+    "@types/irc": "^0.3.32",
+    "@types/mysql": "^2.15.0"
   }
 }
