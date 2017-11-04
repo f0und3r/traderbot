@@ -6,23 +6,24 @@ export const store = Json.map2(
     createdAt: t0[1],
     updatedAt: t0[2],
     type: t0[3],
-    owner: t0[4],
-    title: t0[5],
-    map: t0[6],
-    x: t0[7],
-    y: t1[0]
+    state: t0[4],
+    owner: t0[5],
+    title: t0[6],
+    map: t0[7],
+    x: t1[0],
+    y: t1[1]
   }),
   Json.mapTuple8(
     Json.field("id", Json.number),
     Json.field("created_at", Json.date),
     Json.field("updated_at", Json.date),
     Json.field("type", Json.string),
+    Json.field("state", Json.string),
     Json.field("owner", Json.string),
     Json.field("title", Json.string),
-    Json.field("map", Json.string),
-    Json.field("x", Json.number)
+    Json.field("map", Json.string)
   ),
-  Json.mapTuple1(Json.field("y", Json.number))
+  Json.mapTuple2(Json.field("x", Json.number), Json.field("y", Json.number))
 )
 
 export const stores = Json.list(store)
@@ -34,3 +35,14 @@ export const insertResult = Json.map(
   }),
   Json.field("insertId", Json.number)
 )
+
+export const item = Json.map2(
+  (a0, a1) => ({
+    id: a0,
+    name_japanese: a1
+  }),
+  Json.field("id", Json.number),
+  Json.field("name_japanese", Json.string)
+)
+
+export const items = Json.list(item)

@@ -6,6 +6,7 @@ export interface Config {
   channels: string[]
   server: string
   operator: string
+  tickTimeout: number
   queueTimeout: number
 }
 

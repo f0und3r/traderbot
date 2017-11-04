@@ -5,10 +5,11 @@
   },
   "irc": {
     "host": "irc.free-ro.com",
-    "nick": "TraderBot",
+    "nick": "SJjdiasjdi12",
     "channels": ["#FreeRO"],
     "server": "FreeRO",
     "operator": "FreeRO",
+    "tickTimeout": 2500,
     "queueTimeout": 2500
   },
   "tg": {}

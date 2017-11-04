@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `store` (
   `created_at` DATETIME,
   `updated_at` DATETIME,
   `type` ENUM("sell", "buy"),
+  `state` ENUM("created", "updated", "sended"),
   `owner` VARCHAR(256),
   `title` VARCHAR(256),
   `map` VARCHAR(256),
@@ -22,8 +23,4 @@ CREATE TABLE IF NOT EXISTS `store_items` (
   `amount` INT(16) UNSIGNED,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`store_id`) REFERENCES `store` (`id`) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS `irc_requests` (
-
 );
