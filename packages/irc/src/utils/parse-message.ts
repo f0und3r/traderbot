@@ -4,6 +4,7 @@ const cardRegExp = /^#main : \[Server\].*'(.+)'.*'(.+)'\. Грац!/
 const refineRegExp = /^#main : \[Server\].*'(.+)'.*заточил.*\+(\d+) (.+)./
 const buyRegExp = /^#main : \[Server\].*'(.+)'.*скупку.*'(.+)'.*: (.+) <(\d+),(\d+)>/
 const sellRegExp = /^#main : \[Server\].*'(.+)'.*'(.+)'.*: (.+) <(\d+),(\d+)>/
+const refineBreakRegExp = /^#main : \[Server\].*'(.+)'.*сломал.*\+(\d+) (.+) во/
 
 export default (mes: string): Message => {
   const cardMatches = mes.match(cardRegExp)
@@ -46,6 +47,16 @@ export default (mes: string): Message => {
       map: sellMatches[3],
       x: parseInt(sellMatches[4]) || 0,
       y: parseInt(sellMatches[5]) || 0
+    }
+  }
+
+  const refineBreakMatches = mes.match(refineBreakRegExp)
+  if (refineBreakMatches) {
+    return {
+      type: "refine-break",
+      owner: refineBreakMatches[1],
+      refine: parseInt(refineBreakMatches[2]) || 0,
+      item: refineBreakMatches[3]
     }
   }
 

@@ -77,6 +77,8 @@ const handleQueue = () => {
           flushAndTick()
         })
     } else {
+      // @NOTE Здесь может быть никнейм, который ушел с венда, а мы ждем и пингуем
+      // @TODO triesCount?
       flushAndTick()
     }
   } else {
@@ -122,6 +124,8 @@ const tick = () => {
     .catch(error => {
       // @TODO logMessage
       console.log("Ошибка при запросе магазинов", error)
+
+      setTimeout(tick, cfg.tickTimeout)
     })
 }
 

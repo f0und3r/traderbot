@@ -55,12 +55,20 @@ export interface SellMessage {
   y: number
 }
 
+export interface RefineBreakMessage {
+  type: "refine-break"
+  owner: string
+  refine: number
+  item: string
+}
+
 export type Message =
   | TextMessage
   | CardMessage
   | RefineMessage
   | BuyMessage
   | SellMessage
+  | RefineBreakMessage
 
 export interface TextPm {
   type: "text"

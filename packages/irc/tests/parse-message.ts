@@ -5,7 +5,8 @@ import {
   CardMessage,
   RefineMessage,
   BuyMessage,
-  SellMessage
+  SellMessage,
+  RefineBreakMessage
 } from "../src/types"
 
 describe("parseMessage", () => {
@@ -61,5 +62,16 @@ describe("parseMessage", () => {
     expect(message.map).to.equal("izlude")
     expect(message.x).to.equal(138)
     expect(message.y).to.equal(128)
+  })
+
+  it("should return RefineBreakMessage", () => {
+    const text =
+      "#main : [Server] 'Kasumi Seiga Freslight' сломал +5 Platinum Shotel[1] во время заточки..."
+    const message = parseMessage(text) as RefineBreakMessage
+
+    expect(message.type).to.equal("refine-break")
+    expect(message.owner).to.equal("Kasumi Seiga Freslight")
+    expect(message.refine).to.equal(5)
+    expect(message.item).to.equal("Platinum Shotel[1]")
   })
 })
