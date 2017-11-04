@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "config": "^1.27.0"
+  },
+  "devDependencies": {
+    "@types/config": "0.0.33"
+  }
+}

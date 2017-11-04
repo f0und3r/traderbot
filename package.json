@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "watch:db": "tsc -w -p ./packages/db --pretty --locale ru",
+    "watch:irc": "tsc -w -p ./packages/irc --pretty --locale ru",
+    "watch:tg": "tsc -w -p ./packages/tg --pretty --locale ru",
+    "start:db": "",
+    "start:irc": "",
+    "start:tg": ""
+  },
+  "devDependencies": {
+    "lerna": "^2.0.0-rc.5"
+  }
+}

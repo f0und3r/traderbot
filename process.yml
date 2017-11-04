@@ -1,0 +1,5 @@
+apps:
+  - script: packages/irc/lib
+    name: traderbot-irc
+  - script: packages/tg/lib
+    name: traderbot-tg

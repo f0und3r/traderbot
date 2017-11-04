@@ -1,0 +1,8 @@
+{
+  "db": {
+    "uri": "mysql://bot:bot@127.0.0.1/bot",
+    "aliveInterval": 5000
+  },
+  "irc": {},
+  "tg": {}
+}
