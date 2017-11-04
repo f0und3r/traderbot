@@ -3,11 +3,20 @@
     "watch:db": "tsc -w -p ./packages/db --pretty --locale ru",
     "watch:irc": "tsc -w -p ./packages/irc --pretty --locale ru",
     "watch:tg": "tsc -w -p ./packages/tg --pretty --locale ru",
-    "start:db": "",
-    "start:irc": "",
-    "start:tg": ""
+    "start:db": "node ./packages/db/lib",
+    "start:irc": "node ./packages/irc/lib",
+    "start:tg": "node ./packages/tg/lib",
+    "test:db": "",
+    "test:irc": "mocha -r ts-node/register packages/irc/tests/**/*.ts",
+    "test:tg": ""
   },
   "devDependencies": {
-    "lerna": "^2.0.0-rc.5"
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.44",
+    "chai": "^4.1.2",
+    "lerna": "^2.0.0-rc.5",
+    "mocha": "^4.0.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1"
   }
 }

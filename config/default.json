@@ -3,6 +3,12 @@
     "uri": "mysql://bot:bot@127.0.0.1/bot",
     "aliveInterval": 5000
   },
-  "irc": {},
+  "irc": {
+    "host": "irc.free-ro.com",
+    "nick": "HelloDearFriend",
+    "channels": ["#FreeRO"],
+    "server": "FreeRO",
+    "operator": "FreeRO"
+  },
   "tg": {}
 }
