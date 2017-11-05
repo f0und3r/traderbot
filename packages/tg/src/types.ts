@@ -1,3 +1,5 @@
+import * as TelegramBot from "node-telegram-bot-api"
+
 export interface Config {
   token: string
   admin: string[]
@@ -5,42 +7,52 @@ export interface Config {
 
 export type Nullable<T> = null | T
 
-export interface WelcomeStep {
+export interface WelcomeState {
   type: "welcome"
 }
 
-export interface SubscribeSellStep {
+export interface SubscribeSellState {
   type: "subscribe-sell"
   id: null | number
 }
 
-export interface SubscribeBuyStep {
+export interface SubscribeBuyState {
   type: "subscribe-buy"
   id: null | number
 }
 
-export interface SubscribeDeleteStep {
+export interface SubscribeDeleteState {
   type: "subscribe-delete"
 }
 
-export interface SearchSellStep {
+export interface SearchSellState {
   type: "search-sell"
 }
 
-export interface SearchBuyStep {
+export interface SearchBuyState {
   type: "search-buy"
 }
 
-export type Step =
-  | WelcomeStep
-  | SubscribeSellStep
-  | SubscribeBuyStep
-  | SubscribeDeleteStep
-  | SearchSellStep
-  | SearchBuyStep
+export type State =
+  | WelcomeState
+  | SubscribeSellState
+  | SubscribeBuyState
+  | SubscribeDeleteState
+  | SearchSellState
+  | SearchBuyState
 
-export interface ChatsSteps {
-  [id: number]: Step
+export interface States {
+  [id: number]: State
 }
 
 export type ItemIdToName = (itemId: number) => string
+
+export type Listener = (
+  bot: TelegramBot,
+  msg: TelegramBot.Message,
+  state: State,
+  updateState: (state: State) => void,
+  next: () => void
+) => void
+
+export type Listeners = Listener[]
