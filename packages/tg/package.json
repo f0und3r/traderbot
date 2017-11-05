@@ -1,4 +1,5 @@
 {
+  "name": "traderbot-tg",
   "dependencies": {
     "config": "^1.27.0",
     "elow": "^1.0.0",
