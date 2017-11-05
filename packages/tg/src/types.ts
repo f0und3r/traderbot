@@ -2,7 +2,7 @@ import * as TelegramBot from "node-telegram-bot-api"
 
 export interface Config {
   token: string
-  admin: string[]
+  admin: number[]
   tickTimeout: number
 }
 

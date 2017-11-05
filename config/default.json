@@ -13,8 +13,8 @@
     "queueTimeout": 2500
   },
   "tg": {
-    "token": "488888529:AAHfc71cHlTBr8ypt9dIhpbwAe1-Ixlwz3E",
-    "admin": ["4053257"],
+    "token": "479857380:AAGofXFLk9syj1aJuoZCcYTLBMyAFTtEMY8",
+    "admin": [4053257],
     "tickTimeout": 2500
   }
 }
