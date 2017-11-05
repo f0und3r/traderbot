@@ -1,7 +1,7 @@
 import * as config from "config"
 import * as TelegramBot from "node-telegram-bot-api"
 import { Config, ChatsSteps, WelcomeStep } from "./types"
-import { selectWatches, saveWatch } from "./db/queries"
+import { selectWatches, saveWatch, selectItems } from "./db/queries"
 import getItemsNamesByIds from "./utils/get-items-names-by-ids"
 import getWatchText from "./utils/get-watch-text"
 
@@ -118,19 +118,43 @@ bot.on("message", (msg: TelegramBot.Message) => {
         if (matchId === 0) {
           chatsSteps[id] = { type: "welcome" }
         } else {
-          chatStep.id = matchId
-          bot.sendMessage(id, "Введите максимальную сумму продажи (0 - любая)")
+          selectItems([matchId])
+            .then(items => {
+              if (items.length > 0) {
+                chatStep.id = matchId
+                bot.sendMessage(
+                  id,
+                  "Введите максимальную сумму продажи (0 - любая)"
+                )
+              } else {
+                chatsSteps[id] = { type: "welcome" }
+                bot.sendMessage(id, "Такого предмета не найдено")
+              }
+            })
+            .catch(error => {
+              // @TODO logMessage
+              console.error(
+                "Ошибка при сохранении подписки",
+                id,
+                username,
+                error
+              )
+              bot.sendMessage(id, "Упс, кажется что-то пошло не так :(")
+              chatsSteps[id] = { type: "welcome" }
+            })
         }
       } else {
         const matchAmount = parseInt(matches[1]) || 0
         saveWatch(id, chatStep.id, "sell", matchAmount)
           .then(watchId => {
             bot.sendMessage(id, `Подписка ${watchId} успешно сохранена!`)
+            chatsSteps[id] = { type: "welcome" }
           })
           .catch(error => {
             // @TODO logMessage
             console.error("Ошибка при сохранении подписки", id, username, error)
             bot.sendMessage(id, "Упс, кажется что-то пошло не так :(")
+            chatsSteps[id] = { type: "welcome" }
           })
       }
     }
