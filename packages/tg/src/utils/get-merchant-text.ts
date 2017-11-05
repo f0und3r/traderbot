@@ -11,9 +11,11 @@ export default (w: Watch, s: Store, si: StoreItem, t: ItemIdToName): string => {
     parts.push("Открылась скупка")
   }
 
-  parts.push(`${s.map}<${s.x},${s.y}> "${s.title}" продавца ${s.owner}`)
+  parts.push(`[${s.map}<${s.x},${s.y}>] [${s.title}] продавца [${s.owner}]`)
   parts.push(
-    `${t(si.item_id)} за ${prettyAmount(si.amount)} в количестве ${si.count}`
+    `[${t(si.item_id)}] за [${prettyAmount(
+      si.amount
+    )}] в количестве [${si.count}]`
   )
 
   return parts.join(" ")
