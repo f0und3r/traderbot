@@ -207,9 +207,7 @@ export const saveStore = (
           )
           .then(() => resolve(id))
       )
-      .catch(error => {
-        reject({ type: "db", src: "db.queries.insertStore", error })
-      })
+      .catch(reject)
   })
 
 export const getItemsByNames = (names: string[]): Promise<Items> =>

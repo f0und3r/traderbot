@@ -2,10 +2,12 @@
   "dependencies": {
     "config": "^1.27.0",
     "elow": "^1.0.0",
+    "mysql": "^2.15.0",
     "node-telegram-bot-api": "^0.29.0"
   },
   "devDependencies": {
     "@types/config": "0.0.33",
+    "@types/mysql": "^2.15.0",
     "@types/node-telegram-bot-api": "^0.28.1"
   }
 }
