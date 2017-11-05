@@ -43,6 +43,9 @@ const tick = () => {
     .then(results => {
       const stores = results[0]
 
+      // @TODO logMessage
+      console.log("tg->tick->stores", stores)
+
       if (stores.length > 0) {
         let storesItems: StoreItems = []
 

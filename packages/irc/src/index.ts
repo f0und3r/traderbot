@@ -103,6 +103,8 @@ const handleQueue = () => {
 const tick = () => {
   selectCreatedStores()
     .then(stores => {
+      // @TODO logMessage
+      console.log("irc->tick->stores", stores)
       if (stores.length === 0) {
         setTimeout(tick, cfg.tickTimeout)
       } else {
