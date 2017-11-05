@@ -9,5 +9,9 @@ export default (str: string): StoreState => {
     return "updated"
   }
 
+  if (str === "failure") {
+    return "failure"
+  }
+
   return "sended"
 }

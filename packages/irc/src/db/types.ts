@@ -4,7 +4,7 @@ export interface Config {
 }
 
 export type StoreType = "sell" | "buy"
-export type StoreState = "created" | "updated" | "sended"
+export type StoreState = "created" | "updated" | "sended" | "failure"
 
 export interface Store {
   id: number

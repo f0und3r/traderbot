@@ -73,8 +73,15 @@ const handleQueue = () => {
         })
     } else {
       // @NOTE Здесь может быть никнейм, который ушел с венда, а мы ждем и пингуем
-      // @TODO triesCount?
-      flushAndTick()
+      saveStore(type, "failure", owner, "", "", 0, 0, [])
+        .then(id => {
+          flushAndTick()
+        })
+        .catch(error => {
+          // @TODO logMessage
+          console.error("Ошибка при сохранении магазина", error)
+          flushAndTick()
+        })
     }
   } else {
     queueItem = queue.shift() || null

@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `store` (
   `created_at` DATETIME,
   `updated_at` DATETIME,
   `type` ENUM("sell", "buy"),
-  `state` ENUM("created", "updated", "sended"),
+  `state` ENUM("created", "updated", "sended", "failure"),
   `owner` VARCHAR(256),
   `title` VARCHAR(256),
   `map` VARCHAR(256),
