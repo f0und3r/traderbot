@@ -42,3 +42,14 @@ export const deleteResult = Json.map(
   }),
   Json.field("affectedRows", Json.number)
 )
+
+export const item = Json.map2(
+  (a0, a1) => ({
+    id: a0,
+    name_japanese: a1
+  }),
+  Json.field("id", Json.number),
+  Json.field("name_japanese", Json.string)
+)
+
+export const items = Json.list(item)

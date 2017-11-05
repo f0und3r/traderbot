@@ -1,6 +1,9 @@
 import * as config from "config"
 import * as TelegramBot from "node-telegram-bot-api"
 import { Config, ChatsSteps, WelcomeStep } from "./types"
+import { selectWatches, saveWatch } from "./db/queries"
+import getItemsNamesByIds from "./utils/get-items-names-by-ids"
+import getWatchText from "./utils/get-watch-text"
 
 const cfg: Config = config.get("tg")
 const bot = new TelegramBot(cfg.token, { polling: true })
@@ -42,6 +45,8 @@ const numberRegExp = /^\d+$/
 bot.on("message", (msg: TelegramBot.Message) => {
   const id = msg.chat.id
   const text = msg.text || ""
+  const username =
+    msg.chat.username || (msg.from && msg.from.username) || "Unknown"
 
   const chatStep = chatsSteps[id] || defaultStep
 
@@ -58,7 +63,37 @@ bot.on("message", (msg: TelegramBot.Message) => {
       chatsSteps[id] = { type: "subscribe-buy", id: null }
       bot.sendMessage(id, inputIdText)
     } else if (text === subscribeListText) {
-      bot.sendMessage(id, "Список предметов")
+      selectWatches(id)
+        .then(watches => {
+          if (watches.length > 0) {
+            getItemsNamesByIds(watches.map(watch => watch.item_id))
+              .then(itemIdToName => {
+                bot.sendMessage(
+                  id,
+                  watches
+                    .map(watch => getWatchText(watch, itemIdToName))
+                    .join("\n")
+                )
+              })
+              .catch(error => {
+                // @TODO logMessage
+                console.error(
+                  "Ошибка при получении списка",
+                  id,
+                  username,
+                  error
+                )
+                bot.sendMessage(id, "Упс, кажется что-то пошло не так :(")
+              })
+          } else {
+            bot.sendMessage(id, "Ваш список подписок пока пуст")
+          }
+        })
+        .catch(error => {
+          // @TODO logMessage
+          console.error("Ошибка при получении списка", id, username, error)
+          bot.sendMessage(id, "Упс, кажется что-то пошло не так :(")
+        })
     } else if (text === subscribeDeleteText) {
       chatsSteps[id] = { type: "subscribe-delete" }
       bot.sendMessage(id, inputIdText)
@@ -78,7 +113,8 @@ bot.on("message", (msg: TelegramBot.Message) => {
       bot.sendMessage(id, inputIdInvalidText)
     } else {
       if (chatStep.id === null) {
-        const matchId = parseInt(matches[1]) || 0
+        const matchId = parseInt(matches[0]) || 0
+
         if (matchId === 0) {
           chatsSteps[id] = { type: "welcome" }
         } else {
@@ -87,8 +123,15 @@ bot.on("message", (msg: TelegramBot.Message) => {
         }
       } else {
         const matchAmount = parseInt(matches[1]) || 0
-        // @TODO ADD WATCH
-        bot.sendMessage(id, "Подписка на продажу успешно добавлена!")
+        saveWatch(id, chatStep.id, "sell", matchAmount)
+          .then(watchId => {
+            bot.sendMessage(id, `Подписка ${watchId} успешно сохранена!`)
+          })
+          .catch(error => {
+            // @TODO logMessage
+            console.error("Ошибка при сохранении подписки", id, username, error)
+            bot.sendMessage(id, "Упс, кажется что-то пошло не так :(")
+          })
       }
     }
   } else if (chatStep.type === "subscribe-buy") {

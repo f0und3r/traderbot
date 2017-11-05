@@ -1,13 +1,15 @@
 import * as Json from "elow/lib/Json/Decode"
 import { match } from "elow/lib/Result"
 import db from "./"
-import { WatchType, Watch } from "./types"
+import { WatchType, Watch, Watches, Items } from "./types"
 import { Nullable } from "../types"
 import {
   watchAtIndex0 as watchAtIndex0Decoder,
   insertResult as insertResultDecoder,
   updateResult as updateResultDecoder,
-  deleteResult as deleteResultDecoder
+  deleteResult as deleteResultDecoder,
+  watches as watchesDecoder,
+  items as itemsDecoder
 } from "./decoders"
 import parseWatchType from "./utils/parse-watch-type"
 
@@ -146,6 +148,63 @@ export const deleteWatch = (
             },
             Ok: data => {
               resolve(data.affectedRows > 0)
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const selectWatches = (chatId: number): Promise<Watches> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `watch` WHERE `chat_id` = ?",
+      [chatId],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.selectWatches", error })
+        } else {
+          match(Json.decodeValue(results, watchesDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectWatches",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(
+                data.map(watch => ({
+                  ...watch,
+                  type: parseWatchType(watch.type)
+                }))
+              )
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const selectItems = (ids: number[]): Promise<Items> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT `id`, `name_japanese` FROM `item_db` WHERE `id` IN (?)",
+      [ids],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.selectItems", error })
+        } else {
+          match(Json.decodeValue(results, itemsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectItems",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data)
             }
           })
         }

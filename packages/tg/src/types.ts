@@ -42,3 +42,5 @@ export type Step =
 export interface ChatsSteps {
   [id: number]: Step
 }
+
+export type ItemIdToName = (itemId: number) => string

@@ -14,3 +14,12 @@ export interface Watch {
   type: WatchType
   amount: number
 }
+
+export type Watches = Watch[]
+
+export interface Item {
+  id: number
+  name_japanese: string
+}
+
+export type Items = Item[]
