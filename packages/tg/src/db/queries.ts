@@ -1,7 +1,15 @@
 import * as Json from "elow/lib/Json/Decode"
 import { match } from "elow/lib/Result"
 import db from "./"
-import { WatchType, Watch, Watches, Items } from "./types"
+import {
+  WatchType,
+  Watch,
+  Watches,
+  Items,
+  StoreType,
+  StoreItems,
+  Stores
+} from "./types"
 import { Nullable } from "../types"
 import {
   watchAtIndex0 as watchAtIndex0Decoder,
@@ -9,9 +17,13 @@ import {
   updateResult as updateResultDecoder,
   deleteResult as deleteResultDecoder,
   watches as watchesDecoder,
-  items as itemsDecoder
+  items as itemsDecoder,
+  storeItems as storeItemsDecoder,
+  stores as storesDecoder
 } from "./decoders"
 import parseWatchType from "./utils/parse-watch-type"
+import parseStoreState from "./utils/parse-store-state"
+import parseStoreType from "./utils/parse-store-type"
 
 export const selectWatch = (
   chatId: number,
@@ -205,6 +217,67 @@ export const selectItems = (ids: number[]): Promise<Items> =>
             },
             Ok: data => {
               resolve(data)
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const selectStoresItems = (
+  itemId: number,
+  storeType: StoreType
+): Promise<StoreItems> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT `store_items`.* FROM `store`, `store_items` WHERE `store`.`id` = `store_items`.`store_id` AND `item_id` = ? AND `store`.`type` = ?",
+      [itemId, storeType],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.selectStoresItems", error })
+        } else {
+          match(Json.decodeValue(results, storeItemsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectStoresItems",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data)
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const selectStores = (storeIds: number[]): Promise<Stores> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `store` WHERE `id` IN (?)",
+      [storeIds],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.selectStores", error })
+        } else {
+          match(Json.decodeValue(results, storesDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectStores",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(
+                data.map(store => ({
+                  ...store,
+                  type: parseStoreType(store.type),
+                  state: parseStoreState(store.state)
+                }))
+              )
             }
           })
         }

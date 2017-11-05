@@ -23,3 +23,33 @@ export interface Item {
 }
 
 export type Items = Item[]
+
+export type StoreType = "sell" | "buy"
+export type StoreState = "created" | "updated" | "sended" | "failure"
+
+export interface Store {
+  id: number
+  created_at: Date
+  updated_at: Date
+  type: StoreType
+  state: StoreState
+  owner: string
+  title: string
+  map: string
+  x: number
+  y: number
+}
+
+export type Stores = Store[]
+
+export interface StoreItem {
+  id: number
+  created_at: Date
+  updated_at: Date
+  store_id: number
+  item_id: number
+  count: number
+  amount: number
+}
+
+export type StoreItems = StoreItem[]
