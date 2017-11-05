@@ -12,16 +12,9 @@ export const searchBuyText = "Поиск по скупкам"
 const welcomeOptions = {
   reply_markup: {
     keyboard: [
-      [
-        { text: subscribeSellText },
-        { text: subscribeListText },
-        { text: searchSellText }
-      ],
-      [
-        { text: subscribeBuyText },
-        { text: subscribeDeleteText },
-        { text: searchBuyText }
-      ]
+      [{ text: subscribeSellText }, { text: subscribeListText }],
+      [{ text: subscribeBuyText }, { text: subscribeDeleteText }],
+      [{ text: searchSellText }, { text: searchBuyText }]
     ]
   }
 }
