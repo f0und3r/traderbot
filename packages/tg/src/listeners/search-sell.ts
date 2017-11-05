@@ -60,7 +60,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
 
                   if (storeItems.length > 0) {
                     messages.push(
-                      `Магазин ${store.title} продавца ${store.owner} в ${store.map}<${store.x}, ${store.y}>`
+                      `Магазин [${store.title}] продавца [${store.owner}] в [${store.map}<${store.x}, ${store.y}>]`
                     )
                     storeItems.forEach(storeItem => {
                       messages.push(
