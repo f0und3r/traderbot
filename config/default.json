@@ -1,6 +1,6 @@
 {
   "db": {
-    "uri": "mysql://bot:bot@127.0.0.1/bot",
+    "uri": "mysql://traderbot:traderbot@127.0.0.1/traderbot",
     "aliveInterval": 5000
   },
   "irc": {
