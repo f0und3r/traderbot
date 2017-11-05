@@ -284,3 +284,124 @@ export const selectStores = (storeIds: number[]): Promise<Stores> =>
       }
     )
   })
+
+export const selectUpdatedStores = (): Promise<Stores> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `store` WHERE `state` = ?",
+      ["updated"],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.selectUpdatedStores", error })
+        } else {
+          match(Json.decodeValue(results, storesDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectUpdatedStore",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(
+                data.map(store => ({
+                  ...store,
+                  type: parseStoreType(store.type),
+                  state: parseStoreState(store.state)
+                }))
+              )
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const updateFailureStores = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "UPDATE `store` SET `updated_at` = NOW(), `state` = ? WHERE `updated_at` < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND `state` = ?",
+      ["created", "failure"],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.updateFailuredStores", error })
+        } else {
+          resolve()
+        }
+      }
+    )
+  })
+
+export const selectStoresItemsByIds = (
+  storeId: number[]
+): Promise<StoreItems> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `store_items` WHERE `store_id` IN (?)",
+      [storeId],
+      (error, results) => {
+        if (error) {
+          reject({
+            type: "db",
+            src: "db.queries.selectStoresItemsByIds",
+            error
+          })
+        } else {
+          match(Json.decodeValue(results, storeItemsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectStoresItemsByIds",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data)
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const getWatches = (itemsIds: number[]): Promise<Watches> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `watch` WHERE `item_id` IN (?)",
+      [itemsIds],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.getWatches", error })
+        } else {
+          match(Json.decodeValue(results, watchesDecoder), {
+            Err: err => {
+              reject({ type: "elow", src: "db.queries.getWatches", error: err })
+            },
+            Ok: data => {
+              resolve(
+                data.map(watch => ({
+                  ...watch,
+                  type: parseWatchType(watch.type)
+                }))
+              )
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const updateStores = (ids: number[]): Promise<void> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "UPDATE `store` SET `state` = ? WHERE `id` IN (?)",
+      ["sended", ids],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.updateStores", error })
+        } else {
+          resolve()
+        }
+      }
+    )
+  })

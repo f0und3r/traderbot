@@ -3,6 +3,7 @@ import * as TelegramBot from "node-telegram-bot-api"
 export interface Config {
   token: string
   admin: string[]
+  tickTimeout: number
 }
 
 export type Nullable<T> = null | T
