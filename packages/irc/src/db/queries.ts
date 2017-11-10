@@ -189,24 +189,26 @@ export const saveStore = (
     selectStore(owner)
       .then(store => {
         if (store) {
-          return updateStore(type, state, owner, title, map, x, y).then(() => {
-            return store.id
-          })
+          return deleteStoreItems(store.id)
+            .then(() => {
+              return Promise.all(
+                items.map(item =>
+                  saveStoreItem(store.id, item.item, item.count, item.amount)
+                )
+              )
+            })
+            .then(() => updateStore(type, state, owner, title, map, x, y))
+            .then(() => resolve(store.id))
         } else {
-          return insertStore(type, state, owner, title, map, x, y)
-        }
-      })
-      .then(id =>
-        deleteStoreItems(id)
-          .then(() =>
+          return insertStore(type, state, owner, title, map, x, y).then(id => {
             Promise.all(
               items.map(item =>
                 saveStoreItem(id, item.item, item.count, item.amount)
               )
-            )
-          )
-          .then(() => resolve(id))
-      )
+            ).then(() => resolve(id))
+          })
+        }
+      })
       .catch(reject)
   })
 
