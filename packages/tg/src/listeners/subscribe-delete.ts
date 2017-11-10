@@ -1,6 +1,7 @@
 import { Listener } from "../types"
 import { subscribeDeleteText } from "./welcome"
 import { deleteWatch } from "../db/queries"
+import logMessage from "../utils/log-message"
 
 const inputIdText = "Введите идентификатор подписки (0 - для выхода)"
 const inputIdInvalidText =
@@ -40,8 +41,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
           })
           .catch(error => {
             updateState({ type: "welcome" })
-            // @TODO logMessage
-            console.error("Ошибка при удалении подписки из БД", error)
+            logMessage("error", "Ошибка при удалении подписки из БД", error)
             bot.sendMessage(chatId, "Упс, кажется что-то пошло не так :(")
           })
       }

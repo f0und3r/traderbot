@@ -6,6 +6,7 @@ import parsePm from "./utils/parse-pm"
 import { selectCreatedStores, saveStore } from "./db/queries"
 import getItemsByNames from "./utils/get-items-ids-by-names"
 import { SaveStoreItem } from "./db/types"
+import logMessage from "./utils/log-message"
 
 const cfg: Config = config.get("irc")
 const con = new irc.Client(cfg.host, cfg.nick, { channels: cfg.channels })
@@ -67,8 +68,7 @@ const handleQueue = () => {
           flushAndTick()
         })
         .catch(error => {
-          // @TODO logMessage
-          console.error("Ошибка при сохранении магазина", error)
+          logMessage("error", "Ошибка при сохранении магазина", error)
           flushAndTick()
         })
     } else {
@@ -78,8 +78,7 @@ const handleQueue = () => {
           flushAndTick()
         })
         .catch(error => {
-          // @TODO logMessage
-          console.error("Ошибка при сохранении магазина", error)
+          logMessage("error", "Ошибка при сохранении магазина", error)
           flushAndTick()
         })
     }
@@ -103,8 +102,8 @@ const handleQueue = () => {
 const tick = () => {
   selectCreatedStores()
     .then(stores => {
-      // @TODO logMessage
-      console.log("irc->tick->stores", stores)
+      logMessage("debug", "irc->tick->stores", stores)
+
       if (stores.length === 0) {
         setTimeout(tick, cfg.tickTimeout)
       } else {
@@ -120,8 +119,7 @@ const tick = () => {
       }
     })
     .catch(error => {
-      // @TODO logMessage
-      console.error("Ошибка при запросе магазинов", error)
+      logMessage("error", "Ошибка при запросе магазинов", error)
 
       setTimeout(tick, cfg.tickTimeout)
     })
@@ -148,8 +146,7 @@ con.addListener("message", (from: string, to: string, mes: string) => {
     )
       .then(id => {})
       .catch(err => {
-        // @TODO logMessage
-        console.error("Ошибка при создании/обновлении магазина", err)
+        logMessage("error", "Ошибка при создании/обновлении магазина", err)
       })
   }
 })
@@ -175,8 +172,7 @@ con.addListener("pm", (from: string, mes: string) => {
 })
 
 con.addListener("error", err => {
-  // @TODO logMessage
-  console.error("Проблема с соединением к IRC", err)
+  logMessage("error", "Проблема с соединением к IRC", err)
 })
 
 // @NOTE Запускаем обработку из БД

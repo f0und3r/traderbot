@@ -1,6 +1,7 @@
 import { Listener } from "../types"
 import { subscribeBuyText } from "./welcome"
 import { selectItems, saveWatch } from "../db/queries"
+import logMessage from "../utils/log-message"
 
 const inputIdText = "Введите идентификатор предмета (0 - для выхода)"
 const inputIdInvalidText =
@@ -42,8 +43,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
           })
           .catch(error => {
             updateState({ type: "welcome" })
-            // @TODO logMessage
-            console.error("Ошибка при проверке вещи в БД", error)
+            logMessage("error", "Ошибка при проверке вещи в БД", error)
             bot.sendMessage(chatId, "Упс, кажется что-то пошло не так :(")
           })
       } else {
@@ -66,8 +66,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
           bot.sendMessage(chatId, `Подписка ${watchId} успешно сохранена!`)
         })
         .catch(error => {
-          // @TODO logMessage
-          console.error("Ошибка при добавлении подписки в БД", error)
+          logMessage("error", "Ошибка при добавлении подписки в БД", error)
           bot.sendMessage(chatId, "Упс, кажется что-то пошло не так :(")
         })
     }

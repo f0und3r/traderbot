@@ -12,6 +12,7 @@ import {
 import { StoreItems } from "./db/types"
 import getItemsNamesByIds from "./utils/get-items-names-by-ids"
 import getMerchantText from "./utils/get-merchant-text"
+import logMessage from "./utils/log-message"
 
 const cfg: Config = config.get("tg")
 const bot = new TelegramBot(cfg.token, { polling: true })
@@ -43,8 +44,7 @@ const tick = () => {
     .then(results => {
       const stores = results[0]
 
-      // @TODO logMessage
-      console.log("tg->tick->stores", stores)
+      logMessage("debug", "tg->tick->stores", stores)
 
       if (stores.length > 0) {
         let storesItems: StoreItems = []
@@ -118,8 +118,7 @@ const tick = () => {
       setTimeout(tick, cfg.tickTimeout)
     })
     .catch(error => {
-      // @TODO logMessage
-      console.error("Ошибка при обновлении данных в БД", error)
+      logMessage("error", "Ошибка при обновлении данных в БД", error)
       setTimeout(tick, cfg.tickTimeout)
     })
 }

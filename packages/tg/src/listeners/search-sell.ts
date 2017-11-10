@@ -4,6 +4,7 @@ import { selectStoresItems, selectStores } from "../db/queries"
 import { StoreItems } from "../db/types"
 import getItemsNamesByIds from "../utils/get-items-names-by-ids"
 import prettyAmount from "../utils/pretty-amount"
+import logMessage from "../utils/log-message"
 
 const inputIdText = "Введите идентификатор предмета (0 - для выхода)"
 const inputIdInvalidText =
@@ -85,8 +86,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
           })
           .catch(error => {
             updateState({ type: "welcome" })
-            // @TODO logMessage
-            console.error("Ошибка при поиске вещей в БД", error)
+            logMessage("error", "Ошибка при поиске вещей в БД", error)
             bot.sendMessage(chatId, "Упс, кажется что-то пошло не так :(")
           })
       } else {
