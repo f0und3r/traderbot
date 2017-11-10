@@ -108,14 +108,17 @@ const tick = () => {
                 })
               })
 
-              return updateStores(stores.map(store => store.id))
+              return updateStores(stores.map(store => store.id)).then(() => {
+                setTimeout(tick, cfg.tickTimeout)
+              })
             })
+          } else {
+            setTimeout(tick, cfg.tickTimeout)
           }
         })
+      } else {
+        setTimeout(tick, cfg.tickTimeout)
       }
-    })
-    .then(() => {
-      setTimeout(tick, cfg.tickTimeout)
     })
     .catch(error => {
       logMessage("error", "Ошибка при обновлении данных в БД", error)
