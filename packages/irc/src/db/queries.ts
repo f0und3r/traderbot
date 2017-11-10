@@ -200,12 +200,22 @@ export const saveStore = (
             .then(() => updateStore(type, state, owner, title, map, x, y))
             .then(() => resolve(store.id))
         } else {
-          return insertStore(type, state, owner, title, map, x, y).then(id => {
+          return insertStore(
+            type,
+            "created",
+            owner,
+            title,
+            map,
+            x,
+            y
+          ).then(id => {
             Promise.all(
               items.map(item =>
                 saveStoreItem(id, item.item, item.count, item.amount)
               )
-            ).then(() => resolve(id))
+            )
+              .then(() => updateStore(type, state, owner, title, map, x, y))
+              .then(() => resolve(id))
           })
         }
       })
