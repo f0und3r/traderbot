@@ -1,17 +1,19 @@
-import subscribeSell from "./subscribe-sell"
-import subscribeBuy from "./subscribe-buy"
-import subscribeList from "./subscribe-list"
-import subscribeDelete from "./subscribe-delete"
-import searchSell from "./search-sell"
-import searchBuy from "./search-buy"
-import welcome from "./welcome"
+import commands from "./01-commands"
+import itemId from "./02-item-id"
+import subscribeId from "./02-subscribe-id"
+import amount from "./03-amount"
+import subscribe from "./04-subscribe"
+import subscribeList from "./02-subscribe-list"
+import subscribeDelete from "./03-subscribe-delete"
+import search from "./03-search"
 
 export default [
-  subscribeSell,
-  subscribeBuy,
+  commands,
+  itemId,
+  subscribeId,
+  amount,
+  subscribe,
   subscribeList,
   subscribeDelete,
-  searchSell,
-  searchBuy,
-  welcome
+  search
 ]

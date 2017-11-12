@@ -1,6 +1,6 @@
 import * as config from "config"
 import * as TelegramBot from "node-telegram-bot-api"
-import { Config, States, WelcomeState, State } from "./types"
+import { Config, States, CommandsState, State } from "./types"
 import listeners from "./listeners"
 import {
   selectUpdatedStores,
@@ -18,13 +18,13 @@ const cfg: Config = config.get("tg")
 const bot = new TelegramBot(cfg.token, { polling: true })
 
 const states: States = {}
-const defaultState: WelcomeState = { type: "welcome" }
+const defaultState: CommandsState = { type: "commands" }
 
 bot.on("message", (msg: TelegramBot.Message) => {
   const messageListeners = listeners.slice()
   const id = msg.chat.id
-  const state = states[id] || defaultState
 
+  const getState = (id: number): State => states[id] || defaultState
   const updateState = (state: State) => {
     states[id] = state
   }
@@ -32,7 +32,7 @@ bot.on("message", (msg: TelegramBot.Message) => {
   const next = () => {
     const listener = messageListeners.shift()
     if (listener) {
-      listener(bot, msg, state, updateState, next)
+      listener(bot, msg, getState(id), updateState, next)
     }
   }
 

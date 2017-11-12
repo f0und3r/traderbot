@@ -5,6 +5,7 @@ import {
   WatchType,
   Watch,
   Watches,
+  Item,
   Items,
   StoreType,
   StoreItems,
@@ -191,6 +192,32 @@ export const selectWatches = (chatId: number): Promise<Watches> =>
                   type: parseWatchType(watch.type)
                 }))
               )
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const selectItem = (idOrName: string): Promise<Nullable<Item>> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT `id`, `name_japanese` FROM `item_db` WHERE `id` = ? OR `name_english` = ? OR `name_japanese` = ? LIMIT 1",
+      [idOrName, idOrName, idOrName],
+      (error, result) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.selectItem", error })
+        } else {
+          match(Json.decodeValue(result, itemsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.selectItem",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data.length > 0 ? data[0] : null)
             }
           })
         }

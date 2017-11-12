@@ -8,39 +8,82 @@ export interface Config {
 
 export type Nullable<T> = null | T
 
-export interface WelcomeState {
-  type: "welcome"
+// export interface WelcomeState {
+//   type: "welcome"
+// }
+
+// export interface SubscribeSellState {
+//   type: "subscribe-sell"
+//   id: null | number
+// }
+
+// export interface SubscribeBuyState {
+//   type: "subscribe-buy"
+//   id: null | number
+// }
+
+// export interface SubscribeDeleteState {
+//   type: "subscribe-delete"
+// }
+
+// export interface SearchSellState {
+//   type: "search-sell"
+// }
+
+// export interface SearchBuyState {
+//   type: "search-buy"
+// }
+
+// export type State =
+//   | WelcomeState
+//   | SubscribeSellState
+//   | SubscribeBuyState
+//   | SubscribeDeleteState
+//   | SearchSellState
+//   | SearchBuyState
+export interface CommandsState {
+  type: "commands"
 }
 
-export interface SubscribeSellState {
+export interface SubscribeSell {
   type: "subscribe-sell"
-  id: null | number
+  id: Nullable<number>
+  amount: Nullable<number>
 }
 
-export interface SubscribeBuyState {
+export interface SubscribeBuy {
   type: "subscribe-buy"
-  id: null | number
+  id: Nullable<number>
+  amount: Nullable<number>
 }
 
-export interface SubscribeDeleteState {
+export interface SubscribeList {
+  type: "subscribe-list"
+}
+
+export interface SubscribeDelete {
   type: "subscribe-delete"
+  id: Nullable<number>
 }
 
-export interface SearchSellState {
+export interface SearchSell {
   type: "search-sell"
+  id: Nullable<number>
 }
 
-export interface SearchBuyState {
+export interface SearchBuy {
   type: "search-buy"
+  id: Nullable<number>
 }
 
 export type State =
-  | WelcomeState
-  | SubscribeSellState
-  | SubscribeBuyState
-  | SubscribeDeleteState
-  | SearchSellState
-  | SearchBuyState
+  | CommandsState
+  | SubscribeSell
+  | SubscribeBuy
+  | SubscribeList
+  | SubscribeDelete
+  | SearchSell
+  | SearchBuy
 
 export interface States {
   [id: number]: State
