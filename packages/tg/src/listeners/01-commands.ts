@@ -24,9 +24,19 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
   if (state.type === "commands") {
     const text = msg.text || ""
     if (text === subscribeSellText) {
-      updateState({ type: "subscribe-sell", id: null, amount: null })
+      updateState({
+        type: "subscribe-sell",
+        step: "message",
+        id: null,
+        amount: null
+      })
     } else if (text === subscribeBuyText) {
-      updateState({ type: "subscribe-buy", id: null, amount: null })
+      updateState({
+        type: "subscribe-buy",
+        step: "message",
+        id: null,
+        amount: null
+      })
     } else if (text === subscribeListText) {
       updateState({ type: "subscribe-list" })
     } else if (text === subscribeDeleteText) {

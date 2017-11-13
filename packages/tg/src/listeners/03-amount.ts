@@ -11,10 +11,11 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
     (state.type === "subscribe-sell" || state.type === "subscribe-buy") &&
     state.amount === null
   ) {
-    if (onlyNumbersRegExp.test(text)) {
+    if (state.step === "input" && onlyNumbersRegExp.test(text)) {
       updateState({ ...state, amount: parseInt(text) })
       next()
     } else {
+      updateState({ ...state, step: "input" })
       bot.sendMessage(
         msg.chat.id,
         state.type === "subscribe-sell"

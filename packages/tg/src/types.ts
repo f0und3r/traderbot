@@ -47,12 +47,14 @@ export interface CommandsState {
 
 export interface SubscribeSell {
   type: "subscribe-sell"
+  step: "message" | "input"
   id: Nullable<number>
   amount: Nullable<number>
 }
 
 export interface SubscribeBuy {
   type: "subscribe-buy"
+  step: "message" | "input"
   id: Nullable<number>
   amount: Nullable<number>
 }
