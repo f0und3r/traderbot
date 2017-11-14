@@ -14,8 +14,11 @@ const welcomeOptions = {
     keyboard: [
       [{ text: subscribeSellText }, { text: subscribeListText }],
       [{ text: subscribeBuyText }, { text: subscribeDeleteText }],
-      [{ text: searchSellText }, { text: searchBuyText }],
-      [{ text: searchCardsText }]
+      [
+        { text: searchSellText },
+        { text: searchBuyText },
+        { text: searchCardsText }
+      ]
     ]
   }
 }
@@ -47,6 +50,8 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
       updateState({ type: "search-sell", id: null })
     } else if (text === searchBuyText) {
       updateState({ type: "search-buy", id: null })
+    } else if (text === searchCardsText) {
+      updateState({ type: "search-cards", id: null })
     } else {
       bot.sendMessage(msg.chat.id, welcomeText, welcomeOptions)
       runNext = false

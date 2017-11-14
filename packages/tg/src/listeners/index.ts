@@ -6,6 +6,7 @@ import subscribe from "./04-subscribe"
 import subscribeList from "./02-subscribe-list"
 import subscribeDelete from "./03-subscribe-delete"
 import search from "./03-search"
+import searchCards from "./03-search-cards"
 
 export default [
   commands,
@@ -15,5 +16,6 @@ export default [
   subscribe,
   subscribeList,
   subscribeDelete,
-  search
+  search,
+  searchCards
 ]

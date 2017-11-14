@@ -11,7 +11,8 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
     (state.type === "subscribe-sell" ||
       state.type === "subscribe-buy" ||
       state.type === "search-sell" ||
-      state.type === "search-buy") &&
+      state.type === "search-buy" ||
+      state.type === "search-cards") &&
     state.id === null
   ) {
     if (idOrNameRegExp.test(text)) {

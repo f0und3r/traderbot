@@ -9,7 +9,8 @@ import {
   Items,
   StoreType,
   StoreItems,
-  Stores
+  Stores,
+  Cards
 } from "./types"
 import { Nullable } from "../types"
 import {
@@ -20,7 +21,8 @@ import {
   watches as watchesDecoder,
   items as itemsDecoder,
   storeItems as storeItemsDecoder,
-  stores as storesDecoder
+  stores as storesDecoder,
+  cards as cardsDecoder
 } from "./decoders"
 import parseWatchType from "./utils/parse-watch-type"
 import parseStoreState from "./utils/parse-store-state"
@@ -428,6 +430,32 @@ export const updateStores = (ids: number[]): Promise<void> =>
           reject({ type: "db", src: "db.queries.updateStores", error })
         } else {
           resolve()
+        }
+      }
+    )
+  })
+
+export const getCardsOwners = (id: number): Promise<Cards> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `cards` WHERE `item_id` = ? ORDER BY `id` DESC LIMIT 10",
+      [id],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.getCardsOwners", error })
+        } else {
+          match(Json.decodeValue(results, cardsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.getCardsOwners",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data)
+            }
+          })
         }
       }
     )

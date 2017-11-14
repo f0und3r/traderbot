@@ -3,6 +3,7 @@
   "dependencies": {
     "config": "^1.27.0",
     "elow": "^1.0.0",
+    "moment": "^2.19.2",
     "mysql": "^2.15.0",
     "node-telegram-bot-api": "^0.29.0"
   },

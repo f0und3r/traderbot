@@ -78,6 +78,11 @@ export interface SearchBuy {
   id: Nullable<number>
 }
 
+export interface SearchCards {
+  type: "search-cards"
+  id: Nullable<number>
+}
+
 export type State =
   | CommandsState
   | SubscribeSell
@@ -86,6 +91,7 @@ export type State =
   | SubscribeDelete
   | SearchSell
   | SearchBuy
+  | SearchCards
 
 export interface States {
   [id: number]: State
