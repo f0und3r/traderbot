@@ -1,4 +1,5 @@
-import { Listener } from "../types"
+import * as config from "config"
+import { Config, Listener } from "../types"
 
 const welcomeText = "Добро пожаловать!"
 const subscribeSellText = "Подписка на продажу"
@@ -9,6 +10,7 @@ const searchSellText = "Поиск по магазинам"
 const searchBuyText = "Поиск по скупкам"
 const searchCardsText = "Поиск по картам"
 const searchLastTenCardsText = "Последние 10 карт"
+const adminMessageText = "Отправка сообщения"
 
 const welcomeOptions = {
   reply_markup: {
@@ -21,8 +23,20 @@ const welcomeOptions = {
   }
 }
 
+const welcomeAdminOptions = {
+  reply_markup: {
+    keyboard: [
+      [{ text: adminMessageText }],
+      ...welcomeOptions.reply_markup.keyboard
+    ]
+  }
+}
+
+const cfg: Config = config.get("tg")
+
 const listener: Listener = (bot, msg, state, updateState, next) => {
   let runNext = true
+  let isAdmin = cfg.admin.indexOf(msg.chat.id) !== -1
 
   if (state.type === "commands") {
     const text = msg.text || ""
@@ -52,8 +66,14 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
       updateState({ type: "search-cards", id: null })
     } else if (text === searchLastTenCardsText) {
       updateState({ type: "search-last-ten-cards" })
+    } else if (text === adminMessageText && isAdmin) {
+      updateState({ type: "admin-message", step: "message", message: null })
     } else {
-      bot.sendMessage(msg.chat.id, welcomeText, welcomeOptions)
+      bot.sendMessage(
+        msg.chat.id,
+        welcomeText,
+        isAdmin ? welcomeAdminOptions : welcomeOptions
+      )
       runNext = false
     }
   }

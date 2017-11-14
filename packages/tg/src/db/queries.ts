@@ -22,7 +22,8 @@ import {
   items as itemsDecoder,
   storeItems as storeItemsDecoder,
   stores as storesDecoder,
-  cards as cardsDecoder
+  cards as cardsDecoder,
+  chatsIds as chatsIdsDecoder
 } from "./decoders"
 import parseWatchType from "./utils/parse-watch-type"
 import parseStoreState from "./utils/parse-store-state"
@@ -461,19 +462,54 @@ export const getCardsOwners = (id: number): Promise<Cards> =>
     )
   })
 
-export const getLastTenCards = (): Promise<Cards> => new Promise((resolve, reject) => {
-  db.query("SELECT * FROM `cards` ORDER BY `id` DESC LIMIT 10", [], (error, results) => {
-    if (error) {
-      reject({type: "db", src: "db.queries.getLastTenCards", error})
-    } else {
-      match(Json.decodeValue(results, cardsDecoder), {
-        Err: err => {
-          reject({type: "elow", src: "db.queries.getLastTenCards", error: err})
-        },
-        Ok: data => {
-          resolve(data)
+export const getLastTenCards = (): Promise<Cards> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM `cards` ORDER BY `id` DESC LIMIT 10",
+      [],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.getLastTenCards", error })
+        } else {
+          match(Json.decodeValue(results, cardsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.getLastTenCards",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data)
+            }
+          })
         }
-      })
-    }
+      }
+    )
   })
-})
+
+export const getChatsIds = (): Promise<number[]> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT DISTINCT(`chat_id`) as `chat_id` FROM `watch`",
+      [],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.getChatsIds", error })
+        } else {
+          match(Json.decodeValue(results, chatsIdsDecoder), {
+            Err: err => {
+              reject({
+                type: "elow",
+                src: "db.queries.getChatsIds",
+                error: err
+              })
+            },
+            Ok: data => {
+              resolve(data)
+            }
+          })
+        }
+      }
+    )
+  })

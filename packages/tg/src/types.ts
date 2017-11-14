@@ -87,6 +87,12 @@ export interface SearchLastTenCards {
   type: "search-last-ten-cards"
 }
 
+export interface AdminMessage {
+  type: "admin-message"
+  step: "message" | "input"
+  message: Nullable<string>
+}
+
 export type State =
   | CommandsState
   | SubscribeSell
@@ -97,6 +103,7 @@ export type State =
   | SearchBuy
   | SearchCards
   | SearchLastTenCards
+  | AdminMessage
 
 export interface States {
   [id: number]: State

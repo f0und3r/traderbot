@@ -117,3 +117,5 @@ export const card = Json.map4(
 )
 
 export const cards = Json.list(card)
+
+export const chatsIds = Json.list(Json.at(["chat_id"], Json.number))
