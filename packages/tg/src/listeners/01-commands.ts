@@ -7,13 +7,15 @@ const subscribeListText = "Список подписок"
 const subscribeDeleteText = "Удаление подписки"
 const searchSellText = "Поиск по магазинам"
 const searchBuyText = "Поиск по скупкам"
+const searchCardsText = "Поиск по картам"
 
 const welcomeOptions = {
   reply_markup: {
     keyboard: [
       [{ text: subscribeSellText }, { text: subscribeListText }],
       [{ text: subscribeBuyText }, { text: subscribeDeleteText }],
-      [{ text: searchSellText }, { text: searchBuyText }]
+      [{ text: searchSellText }, { text: searchBuyText }],
+      [{ text: searchCardsText }]
     ]
   }
 }

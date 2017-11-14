@@ -8,6 +8,7 @@ import {
   StoreType,
   StoreState,
   SaveStoreItem,
+  Item,
   Items
 } from "./types"
 import {
@@ -241,6 +242,50 @@ export const getItemsByNames = (names: string[]): Promise<Items> =>
             },
             Ok: data => {
               resolve(data)
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const getCard = (name: string): Promise<Nullable<Item>> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "SELECT `id`, `name_japanese` FROM `item_db` WHERE `name_japanese` = ? AND `type` = ? LIMIT 1",
+      [name, 6],
+      (error, results) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.getCard", error })
+        } else {
+          match(Json.decodeValue(results, itemsDecoder), {
+            Err: err => {
+              reject({ type: "elow", src: "db.queries.getCard", error: err })
+            },
+            Ok: data => {
+              resolve(data.length > 0 ? data[0] : null)
+            }
+          })
+        }
+      }
+    )
+  })
+
+export const saveCard = (id: number, owner: string): Promise<number> =>
+  new Promise((resolve, reject) => {
+    db.query(
+      "INSERT INTO `cards` (`item_id`, `created_at`, `owner`) VALUES (?, NOW(), ?)",
+      [id, owner],
+      (error, result) => {
+        if (error) {
+          reject({ type: "db", src: "db.queries.saveCard", error })
+        } else {
+          match(Json.decodeValue(result, insertResultDecoder), {
+            Err: err => {
+              reject({ type: "elow", src: "db.queries.saveCard", error: err })
+            },
+            Ok: data => {
+              resolve(data.insertId)
             }
           })
         }

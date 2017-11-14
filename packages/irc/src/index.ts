@@ -3,7 +3,7 @@ import * as config from "config"
 import { Config, QueueItem, Queue, Nullable, Pm, ItemPm } from "./types"
 import parseMessage from "./utils/parse-message"
 import parsePm from "./utils/parse-pm"
-import { selectCreatedStores, saveStore } from "./db/queries"
+import { selectCreatedStores, saveStore, getCard, saveCard } from "./db/queries"
 import getItemsByNames from "./utils/get-items-ids-by-names"
 import { SaveStoreItem } from "./db/types"
 import logMessage from "./utils/log-message"
@@ -147,6 +147,16 @@ con.addListener("message", (from: string, to: string, mes: string) => {
       .then(id => {})
       .catch(err => {
         logMessage("error", "Ошибка при создании/обновлении магазина", err)
+      })
+  } else if (message.type === "card") {
+    getCard(message.item)
+      .then(card => {
+        if (card !== null) {
+          return saveCard(card.id, message.owner).then(id => {})
+        }
+      })
+      .catch(err => {
+        logMessage("error", "Ошибка при получении/сохранении карты", err)
       })
   }
 })
