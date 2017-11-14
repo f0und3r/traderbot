@@ -460,3 +460,20 @@ export const getCardsOwners = (id: number): Promise<Cards> =>
       }
     )
   })
+
+export const getLastTenCards = (): Promise<Cards> => new Promise((resolve, reject) => {
+  db.query("SELECT * FROM `cards` ORDER BY `id` DESC LIMIT 10", [], (error, results) => {
+    if (error) {
+      reject({type: "db", src: "db.queries.getLastTenCards", error})
+    } else {
+      match(Json.decodeValue(results, cardsDecoder), {
+        Err: err => {
+          reject({type: "elow", src: "db.queries.getLastTenCards", error: err})
+        },
+        Ok: data => {
+          resolve(data)
+        }
+      })
+    }
+  })
+})

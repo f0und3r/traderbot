@@ -8,17 +8,15 @@ const subscribeDeleteText = "Удаление подписки"
 const searchSellText = "Поиск по магазинам"
 const searchBuyText = "Поиск по скупкам"
 const searchCardsText = "Поиск по картам"
+const searchLastTenCardsText = "Последние 10 карт"
 
 const welcomeOptions = {
   reply_markup: {
     keyboard: [
       [{ text: subscribeSellText }, { text: subscribeListText }],
       [{ text: subscribeBuyText }, { text: subscribeDeleteText }],
-      [
-        { text: searchSellText },
-        { text: searchBuyText },
-        { text: searchCardsText }
-      ]
+      [{ text: searchSellText }, { text: searchBuyText }],
+      [{ text: searchCardsText }, { text: searchLastTenCardsText }]
     ]
   }
 }
@@ -52,6 +50,8 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
       updateState({ type: "search-buy", id: null })
     } else if (text === searchCardsText) {
       updateState({ type: "search-cards", id: null })
+    } else if (text === searchLastTenCardsText) {
+      updateState({ type: "search-last-ten-cards" })
     } else {
       bot.sendMessage(msg.chat.id, welcomeText, welcomeOptions)
       runNext = false

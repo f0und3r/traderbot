@@ -83,6 +83,10 @@ export interface SearchCards {
   id: Nullable<number>
 }
 
+export interface SearchLastTenCards {
+  type: "search-last-ten-cards"
+}
+
 export type State =
   | CommandsState
   | SubscribeSell
@@ -92,6 +96,7 @@ export type State =
   | SearchSell
   | SearchBuy
   | SearchCards
+  | SearchLastTenCards
 
 export interface States {
   [id: number]: State
