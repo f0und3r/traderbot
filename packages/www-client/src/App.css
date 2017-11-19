@@ -1,28 +1,29 @@
-.App {
+body {
+  background-color: #fafafa;
+}
+
+.container {
+  margin-top: 32px;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.title {
+  text-decoration: none;
+  color: #000000;
+  opacity: 0.5;
+  transition: opacity ease-out 0.5s;
+  font-size: 32px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.title:hover {
+  opacity: 1;
 }
 
-.App-title {
-  font-size: 1.5em;
+.error {
+  color: #ff0000;
 }
 
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.cards {
+  margin-top: 16px;
+  width: 100%;
 }

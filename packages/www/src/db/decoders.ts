@@ -14,3 +14,14 @@ export const card = Json.map4(
 )
 
 export const cards = Json.list(card)
+
+export const item = Json.map2(
+  (a0, a1) => ({
+    id: a0,
+    name_japanese: a1
+  }),
+  Json.field("id", Json.number),
+  Json.field("name_japanese", Json.string)
+)
+
+export const items = Json.list(item)

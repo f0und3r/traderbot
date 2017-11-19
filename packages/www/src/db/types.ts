@@ -11,3 +11,10 @@ export interface Card {
 }
 
 export type Cards = Card[]
+
+export interface Item {
+  id: number
+  name_japanese: string
+}
+
+export type Items = Item[]

@@ -6,9 +6,16 @@ import { Config } from "./types"
 import { getCards as getCardsDecoder } from "./decoders"
 import { getCards } from "./db/queries"
 import logMessage from "./utils/log-message"
+import getItemsNamesByIds from "./utils/get-items-names-by-ids"
 
 const app = express()
 const cfg: Config = config.get("www")
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*")
+
+  next()
+})
 
 app.get("/cards/:skip/:limit", (req, res) => {
   match(Json.decodeValue(req.params, getCardsDecoder), {
@@ -23,7 +30,18 @@ app.get("/cards/:skip/:limit", (req, res) => {
         res.sendStatus(400)
       } else {
         getCards(skip, limit)
-          .then(cards => res.json(cards))
+          .then(cards => {
+            return getItemsNamesByIds(
+              cards.map(card => card.item_id)
+            ).then(itemNameById => {
+              res.json(
+                cards.map(card => ({
+                  ...card,
+                  name: itemNameById(card.item_id)
+                }))
+              )
+            })
+          })
           .catch(error => {
             logMessage("error", "Ошибка при запросе карт", error)
             res.sendStatus(500)
