@@ -2,6 +2,7 @@
   "name": "www-client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://f0und3r.ru/traderbot-stats",
   "dependencies": {
     "moment": "^2.19.2",
     "react": "^16.1.1",
