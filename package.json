@@ -1,14 +1,14 @@
 {
   "scripts": {
-    "watch:db": "tsc -w -p ./packages/db --pretty --locale ru",
     "watch:irc": "tsc -w -p ./packages/irc --pretty --locale ru",
     "watch:tg": "tsc -w -p ./packages/tg --pretty --locale ru",
-    "start:db": "node ./packages/db/lib",
+    "watch:www": "tsc -w -p ./packages/www --pretty --locale ru",
     "start:irc": "node ./packages/irc/lib",
     "start:tg": "node ./packages/tg/lib",
-    "test:db": "",
+    "start:www": "node ./packages/www/lib",
     "test:irc": "mocha -r ts-node/register packages/irc/tests/**/*.ts",
-    "test:tg": ""
+    "test:tg": "",
+    "test:www": ""
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",

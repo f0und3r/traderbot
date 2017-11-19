@@ -3,3 +3,5 @@ apps:
     name: traderbot-irc
   - script: packages/tg/lib
     name: traderbot-tg
+  - script: packages/www/lib
+    name: traderbot-www

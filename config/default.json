@@ -16,5 +16,8 @@
     "token": "479857380:AAGofXFLk9syj1aJuoZCcYTLBMyAFTtEMY8",
     "admin": [4053257],
     "tickTimeout": 2500
+  },
+  "www": {
+    "port": 8888
   }
 }
