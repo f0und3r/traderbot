@@ -6,7 +6,7 @@ import "./App.css"
 const getPrettyDate = str =>
   moment(str, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD HH:mm:ss")
 
-const api = "http://localhost:8888"
+const api = "https://f0und3r.ru/traderbot"
 const href = "https://forum.free-ro.com/threads/48161/"
 const title = "FreeRO Trader"
 
@@ -91,26 +91,18 @@ class App extends Component {
             {JSON.stringify(error)}
           </div>
         ))}
-        <table className="cards">
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Карта (идентификатор)</th>
-              <th>Владелец</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cards.data.map(card => (
-              <tr key={`cards-${card.id}`}>
-                <td>{getPrettyDate(card.created_at)}</td>
-                <td>
-                  {card.name} ({card.item_id})
-                </td>
-                <td>{card.owner}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="cards">
+          <div className="cards-head" />
+          {cards.data.map(card => (
+            <div key={`cards-${card.id}`} className="cards-row">
+              <div className="cards-date">{getPrettyDate(card.created_at)}</div>
+              <div className="cards-name">
+                {card.name} ({card.item_id})
+              </div>
+              <div className="cards-owner">{card.owner}</div>
+            </div>
+          ))}
+        </div>
         {cards.data.length % PAGE_SIZE === 0 && (
           <a href="javascript:void(0)" onClick={this.handleCardsNext}>
             Дальше

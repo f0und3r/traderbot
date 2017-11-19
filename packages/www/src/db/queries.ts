@@ -7,7 +7,7 @@ import { cards as cardsDecoder, items as itemsDecoder } from "./decoders"
 export const getCards = (skip: number, limit: number): Promise<Cards> =>
   new Promise((resolve, reject) => {
     db.query(
-      "SELECT * FROM `cards` LIMIT ?, ?",
+      "SELECT * FROM `cards` ORDER BY `id` DESC LIMIT ?, ?",
       [skip, limit],
       (error, results) => {
         if (error) {
