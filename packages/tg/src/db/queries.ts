@@ -174,7 +174,7 @@ export const deleteWatch = (
 export const selectWatches = (chatId: number): Promise<Watches> =>
   new Promise((resolve, reject) => {
     db.query(
-      "SELECT * FROM `watch` WHERE `chat_id` = ?",
+      "SELECT * FROM `watch` WHERE `chat_id` = ? ORDER BY `id` DESC",
       [chatId],
       (error, results) => {
         if (error) {
