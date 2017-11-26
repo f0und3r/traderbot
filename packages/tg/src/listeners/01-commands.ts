@@ -1,7 +1,7 @@
 import * as config from "config"
 import { Config, Listener } from "../types"
+import getRandomInt from "../utils/get-random-int"
 
-const welcomeText = "Добро пожаловать!"
 const subscribeSellText = "Подписка на продажу"
 const subscribeBuyText = "Подписка на скупку"
 const subscribeListText = "Список подписок"
@@ -11,6 +11,22 @@ const searchBuyText = "Поиск по скупкам"
 const searchCardsText = "Поиск по картам"
 const searchLastTenCardsText = "Последние 10 карт"
 const adminMessageText = "Отправка сообщения"
+
+const welcomeTexts = [
+  "Вы сегодня очень красивы!",
+  "Добро пожаловать!",
+  "И мне тоже скучно",
+  "Как у Вас дела?",
+  "Лучше Вас никого на свете нету :3",
+  "Не хотите на прогулку? ^_^",
+  "Может чаю? :)",
+  "Еще немножко текста, еще!",
+  "Строго между нами... Тут карты навыпадали, не смотрел?",
+  ":O"
+]
+
+const getRandomWelcomeText = () =>
+  welcomeTexts[getRandomInt(0, welcomeTexts.length - 1)]
 
 const welcomeOptions = {
   reply_markup: {
@@ -71,7 +87,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
     } else {
       bot.sendMessage(
         msg.chat.id,
-        welcomeText,
+        getRandomWelcomeText(),
         isAdmin ? welcomeAdminOptions : welcomeOptions
       )
       runNext = false
