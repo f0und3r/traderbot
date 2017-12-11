@@ -83,6 +83,8 @@ const handleQueue = () => {
         })
     }
   } else {
+    logMessage("debug", "irc->handleQueue->stores", queue)
+
     queueItem = queue.shift() || null
 
     if (queueItem) {
@@ -102,8 +104,6 @@ const handleQueue = () => {
 const tick = () => {
   selectCreatedStores()
     .then(stores => {
-      logMessage("debug", "irc->tick->stores", stores)
-
       if (stores.length === 0) {
         setTimeout(tick, cfg.tickTimeout)
       } else {
