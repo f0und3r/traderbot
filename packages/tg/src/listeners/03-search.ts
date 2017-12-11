@@ -1,4 +1,4 @@
-import { Listener } from "../types"
+import { Listener, Nullable } from "../types"
 import { StoreItems } from "../db/types"
 import { selectStoresItems, selectStores } from "../db/queries"
 import getItemsNamesByIds from "../utils/get-items-names-by-ids"
@@ -37,51 +37,57 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
             const itemNameById = result[1]
             const messages: string[] = []
 
+            let minAmount: Nullable<number> = null
+            let maxAmount: Nullable<number> = null
+
             stores.forEach(store => {
               const storeItems = items.filter(
                 item => item.store_id === store.id
               )
 
               if (storeItems.length > 0) {
-                let minAmount = storeItems[0].amount
-                let maxAmount = storeItems[0].amount
-
                 messages.push(
+                  "\n",
                   state.type === "search-sell"
                     ? `Магазин [${store.title}] продавца [${store.owner}] в [${
                         store.map
                       }<${store.x}, ${store.y}>]`
                     : `Скупка [${store.title}] продавца [${store.owner}] в [${
                         store.map
-                      }<${store.x}, ${store.y}>]`
+                      }<${store.x}, ${store.y}>]`,
+                  "\n"
                 )
 
                 storeItems.forEach(storeItem => {
-                  if (storeItem.amount < minAmount) {
+                  if (minAmount === null || storeItem.amount < minAmount) {
                     minAmount = storeItem.amount
                   }
 
-                  if (storeItem.amount > maxAmount) {
+                  if (maxAmount === null || storeItem.amount > maxAmount) {
                     maxAmount = storeItem.amount
                   }
 
                   messages.push(
                     `[${itemNameById(storeItem.item_id)}] за [${prettyAmount(
                       storeItem.amount
-                    )}] в количестве [${storeItem.count}]`
+                    )}] в количестве [${storeItem.count}]`,
+                    "\n"
                   )
                 })
-
-                messages.unshift(
-                  `Разброс цен в диапазоне [${prettyAmount(
-                    minAmount
-                  )}] - [${prettyAmount(maxAmount)}] (сначала новые магазины)`
-                )
               }
             })
 
+            messages.unshift(
+              `Разброс цен в диапазоне [${
+                minAmount ? prettyAmount(minAmount) : "не определено"
+              }] - [${
+                maxAmount ? prettyAmount(maxAmount) : "не определено"
+              }] (сначала новые магазины)`,
+              "\n"
+            )
+
             updateState({ type: "commands" })
-            bot.sendMessage(msg.chat.id, messages.join("\n"))
+            bot.sendMessage(msg.chat.id, messages.join(""))
           })
         } else {
           updateState({ type: "commands" })
