@@ -10,7 +10,8 @@
     "server": "FreeRO",
     "operator": "FreeRO",
     "tickTimeout": 2500,
-    "queueTimeout": 2500
+    "queueTimeout": 2500,
+    "ignoreMessagesTypes": []
   },
   "tg": {
     "token": "",

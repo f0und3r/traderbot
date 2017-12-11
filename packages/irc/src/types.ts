@@ -8,6 +8,7 @@ export interface Config {
   operator: string
   tickTimeout: number
   queueTimeout: number
+  ignoreMessagesTypes: string[]
 }
 
 export interface QueueItem {

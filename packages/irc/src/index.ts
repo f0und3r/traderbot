@@ -133,6 +133,10 @@ con.addListener("message", (from: string, to: string, mes: string) => {
 
   const message = parseMessage(mes)
 
+  if (cfg.ignoreMessagesTypes.indexOf(message.type) !== -1) {
+    return
+  }
+
   if (message.type === "sell" || message.type === "buy") {
     saveStore(
       message.type,
