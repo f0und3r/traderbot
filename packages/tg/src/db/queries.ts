@@ -260,7 +260,7 @@ export const selectStoresItems = (
 ): Promise<StoreItems> =>
   new Promise((resolve, reject) => {
     db.query(
-      "SELECT `store_items`.* FROM `store`, `store_items` WHERE `store`.`id` = `store_items`.`store_id` AND `item_id` = ? AND `store`.`type` = ?",
+      "SELECT `store_items`.* FROM `store`, `store_items` WHERE `store`.`id` = `store_items`.`store_id` AND `item_id` = ? AND `store`.`type` = ? ORDER BY `store`.`id` DESC",
       [itemId, storeType],
       (error, results) => {
         if (error) {

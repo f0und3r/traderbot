@@ -43,19 +43,40 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
               )
 
               if (storeItems.length > 0) {
+                let minAmount = storeItems[0].amount
+                let maxAmount = storeItems[0].amount
+
                 messages.push(
                   state.type === "search-sell"
-                    ? `Магазин [${store.title}] продавца [${store.owner}] в [${store.map}<${store.x}, ${store.y}>]`
-                    : `Скупка [${store.title}] продавца [${store.owner}] в [${store.map}<${store.x}, ${store.y}>]`
+                    ? `Магазин [${store.title}] продавца [${store.owner}] в [${
+                        store.map
+                      }<${store.x}, ${store.y}>]`
+                    : `Скупка [${store.title}] продавца [${store.owner}] в [${
+                        store.map
+                      }<${store.x}, ${store.y}>]`
                 )
+
                 storeItems.forEach(storeItem => {
+                  if (storeItem.amount < minAmount) {
+                    minAmount = storeItem.amount
+                  }
+
+                  if (storeItem.amount > maxAmount) {
+                    maxAmount = storeItem.amount
+                  }
+
                   messages.push(
                     `[${itemNameById(storeItem.item_id)}] за [${prettyAmount(
                       storeItem.amount
                     )}] в количестве [${storeItem.count}]`
                   )
                 })
-                messages.push("\n")
+
+                messages.unshift(
+                  `Разброс цен в диапазоне [${prettyAmount(
+                    minAmount
+                  )}] - [${prettyAmount(maxAmount)}] (сначала новые магазины)`
+                )
               }
             })
 
