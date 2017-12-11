@@ -82,7 +82,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
                 minAmount ? prettyAmount(minAmount) : "не определено"
               }] - [${
                 maxAmount ? prettyAmount(maxAmount) : "не определено"
-              }] (сначала новые магазины)`,
+              }] (сначала новые)`,
               "\n"
             )
 
