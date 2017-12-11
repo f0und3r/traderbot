@@ -107,12 +107,15 @@ const tick = () => {
       if (stores.length === 0) {
         setTimeout(tick, cfg.tickTimeout)
       } else {
-        stores.forEach(store =>
-          queue.push({
-            type: store.type,
-            owner: store.owner
-          })
-        )
+        // @NOTE Хитрость, store.type пересекается с message.type
+        stores
+          .filter(s => cfg.ignoreMessagesTypes.indexOf(s.type) === -1)
+          .forEach(store =>
+            queue.push({
+              type: store.type,
+              owner: store.owner
+            })
+          )
 
         // @NOTE Начинаем обработку очереди
         handleQueue()
