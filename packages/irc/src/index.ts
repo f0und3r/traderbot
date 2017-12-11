@@ -95,7 +95,7 @@ const handleQueue = () => {
       queueTimeout = setTimeout(handleQueue, cfg.queueTimeout * 2)
     } else {
       // @NOTE Ничего нету, запускаем обработчик записей из БД
-      tick()
+      setTimeout(tick, cfg.tickTimeout)
     }
   }
 }
