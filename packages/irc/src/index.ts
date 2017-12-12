@@ -17,12 +17,16 @@ let queueBuf: Pm[] = []
 let queueItem: Nullable<QueueItem> = null
 let queueTimeout: Nullable<NodeJS.Timer> = null
 
-const flushAndTick = () => {
+const flushAndNext = () => {
   queueBuf = []
   queueItem = null
   queueTimeout = null
 
-  tick()
+  if (queue.length > 0) {
+    handleQueue()
+  } else {
+    tick()
+  }
 }
 
 // @NOTE Обработчик записей очереди
@@ -65,21 +69,21 @@ const handleQueue = () => {
           )
         })
         .then(id => {
-          flushAndTick()
+          flushAndNext()
         })
         .catch(error => {
           logMessage("error", "Ошибка при сохранении магазина", error)
-          flushAndTick()
+          flushAndNext()
         })
     } else {
       // @NOTE Здесь может быть никнейм, который ушел с венда, а мы ждем и пингуем
       saveStore(type, "failure", owner, "", "", 0, 0, [])
         .then(id => {
-          flushAndTick()
+          flushAndNext()
         })
         .catch(error => {
           logMessage("error", "Ошибка при сохранении магазина", error)
-          flushAndTick()
+          flushAndNext()
         })
     }
   } else {
