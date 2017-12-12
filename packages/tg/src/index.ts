@@ -44,78 +44,78 @@ const tick = () => {
     .then(results => {
       const stores = results[0]
 
-      logMessage("debug", "tg->tick->stores", stores)
-
       if (stores.length > 0) {
+        logMessage("debug", "tg->tick->stores", stores)
+
         let storesItems: StoreItems = []
 
-        return selectStoresItemsByIds(
-          stores.map(store => store.id)
-        ).then(result => {
-          const itemsIds: number[] = []
+        return selectStoresItemsByIds(stores.map(store => store.id)).then(
+          result => {
+            const itemsIds: number[] = []
 
-          storesItems = result
+            storesItems = result
 
-          if (storesItems.length > 0) {
-            storesItems.forEach(storeItem => {
-              if (itemsIds.indexOf(storeItem.item_id) === -1) {
-                itemsIds.push(storeItem.item_id)
-              }
-            })
+            if (storesItems.length > 0) {
+              storesItems.forEach(storeItem => {
+                if (itemsIds.indexOf(storeItem.item_id) === -1) {
+                  itemsIds.push(storeItem.item_id)
+                }
+              })
 
-            return Promise.all([
-              getWatches(itemsIds),
-              getItemsNamesByIds(itemsIds)
-            ]).then(result => {
-              const watches = result[0]
-              const itemNameById = result[1]
+              return Promise.all([
+                getWatches(itemsIds),
+                getItemsNamesByIds(itemsIds)
+              ]).then(result => {
+                const watches = result[0]
+                const itemNameById = result[1]
 
-              stores.forEach(store => {
-                const storeItems = storesItems.filter(
-                  storeItem => storeItem.store_id === store.id
-                )
-                storeItems.forEach(storeItem => {
-                  watches.forEach(watch => {
-                    if (watch.type !== store.type) {
-                      return
-                    }
-
-                    if (watch.item_id !== storeItem.item_id) {
-                      return
-                    }
-
-                    if (watch.amount !== 0) {
-                      if (
-                        watch.type === "sell" &&
-                        watch.amount < storeItem.amount
-                      ) {
+                stores.forEach(store => {
+                  const storeItems = storesItems.filter(
+                    storeItem => storeItem.store_id === store.id
+                  )
+                  storeItems.forEach(storeItem => {
+                    watches.forEach(watch => {
+                      if (watch.type !== store.type) {
                         return
                       }
 
-                      if (
-                        watch.type === "buy" &&
-                        watch.amount > storeItem.amount
-                      ) {
+                      if (watch.item_id !== storeItem.item_id) {
                         return
                       }
-                    }
 
-                    bot.sendMessage(
-                      watch.chat_id,
-                      getMerchantText(watch, store, storeItem, itemNameById)
-                    )
+                      if (watch.amount !== 0) {
+                        if (
+                          watch.type === "sell" &&
+                          watch.amount < storeItem.amount
+                        ) {
+                          return
+                        }
+
+                        if (
+                          watch.type === "buy" &&
+                          watch.amount > storeItem.amount
+                        ) {
+                          return
+                        }
+                      }
+
+                      bot.sendMessage(
+                        watch.chat_id,
+                        getMerchantText(watch, store, storeItem, itemNameById)
+                      )
+                    })
                   })
                 })
-              })
 
-              return updateStores(stores.map(store => store.id)).then(() => {
-                setTimeout(tick, cfg.tickTimeout)
+                return updateStores(stores.map(store => store.id)).then(() => {
+                  setTimeout(tick, cfg.tickTimeout)
+                })
               })
-            })
-          } else {
-            setTimeout(tick, cfg.tickTimeout)
+            } else {
+              setTimeout(tick, cfg.tickTimeout)
+            }
           }
-        })
+        )
       } else {
         setTimeout(tick, cfg.tickTimeout)
       }
