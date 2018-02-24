@@ -47,15 +47,13 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
 
               if (storeItems.length > 0) {
                 messages.push(
-                  "\n",
                   state.type === "search-sell"
                     ? `Магазин [${store.title}] продавца [${store.owner}] в [${
                         store.map
                       }<${store.x}, ${store.y}>]`
                     : `Скупка [${store.title}] продавца [${store.owner}] в [${
                         store.map
-                      }<${store.x}, ${store.y}>]`,
-                  "\n"
+                      }<${store.x}, ${store.y}>]`
                 )
 
                 storeItems.forEach(storeItem => {
@@ -70,8 +68,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
                   messages.push(
                     `[${itemNameById(storeItem.item_id)}] за [${prettyAmount(
                       storeItem.amount
-                    )}] в количестве [${storeItem.count}]`,
-                    "\n"
+                    )}] в количестве [${storeItem.count}]`
                   )
                 })
               }
@@ -82,12 +79,11 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
                 minAmount ? prettyAmount(minAmount) : "не определено"
               }] - [${
                 maxAmount ? prettyAmount(maxAmount) : "не определено"
-              }] (сначала новые)`,
-              "\n"
+              }] (сначала новые)`
             )
 
             updateState({ type: "commands" })
-            bot.sendMessage(msg.chat.id, messages.join(""))
+            messages.forEach(message => bot.sendMessage(msg.chat.id, message))
           })
         } else {
           updateState({ type: "commands" })
