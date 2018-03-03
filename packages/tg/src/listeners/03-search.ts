@@ -35,7 +35,7 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
           ]).then(result => {
             const stores = result[0]
             const itemNameById = result[1]
-            const messages: string[] = []
+            const messages: string[][] = []
 
             let minAmount: Nullable<number> = null
             let maxAmount: Nullable<number> = null
@@ -44,9 +44,10 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
               const storeItems = items.filter(
                 item => item.store_id === store.id
               )
+              const storeMessages: string[] = []
 
               if (storeItems.length > 0) {
-                messages.push(
+                storeMessages.push(
                   state.type === "search-sell"
                     ? `Магазин [${store.title}] продавца [${store.owner}] в [${
                         store.map
@@ -65,16 +66,21 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
                     maxAmount = storeItem.amount
                   }
 
-                  messages.push(
+                  storeMessages.push(
                     `[${itemNameById(storeItem.item_id)}] за [${prettyAmount(
                       storeItem.amount
                     )}] в количестве [${storeItem.count}]`
                   )
                 })
+
+                messages.push(storeMessages)
               }
             })
 
-            messages.unshift(
+            updateState({ type: "commands" })
+
+            bot.sendMessage(
+              msg.chat.id,
               `Разброс цен в диапазоне [${
                 minAmount ? prettyAmount(minAmount) : "не определено"
               }] - [${
@@ -82,8 +88,9 @@ const listener: Listener = (bot, msg, state, updateState, next) => {
               }] (сначала новые)`
             )
 
-            updateState({ type: "commands" })
-            messages.forEach(message => bot.sendMessage(msg.chat.id, message))
+            messages.forEach(storeMessages =>
+              bot.sendMessage(msg.chat.id, storeMessages.join("\n"))
+            )
           })
         } else {
           updateState({ type: "commands" })
