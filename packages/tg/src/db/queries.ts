@@ -260,7 +260,7 @@ export const selectStoresItems = (
 ): Promise<StoreItems> =>
   new Promise((resolve, reject) => {
     db.query(
-      "SELECT `store_items`.* FROM `store`, `store_items` WHERE `store`.`id` = `store_items`.`store_id` AND DATE(NOW() - INTERVAL 5 DAY) <= `store`.`updated_at` AND `item_id` = ? AND `store`.`type` = ? ORDER BY `store`.`id` DESC",
+      "SELECT `store_items`.* FROM `store`, `store_items` WHERE `store`.`id` = `store_items`.`store_id` AND DATE(NOW() - INTERVAL 7 DAY) <= `store`.`updated_at` AND `item_id` = ? AND `store`.`type` = ? ORDER BY `store`.`id` DESC",
       [itemId, storeType],
       (error, results) => {
         if (error) {
